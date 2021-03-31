@@ -6,16 +6,30 @@ A Golang helper to access private struct field.
 
 ```go
 type Car struct {
-name string
+    name string
 }
 
 //set private field
-gobber := gobber.New(Car{})
-ok := gobber.Set("name", "")
+gobber := gobber.New(Car{}) //Car{} just for gobber to setup struct metadata
+
+target := &Car{name: "old"}
+ok := gobber.Set(target, "name", "new")
 
 //get private field
 namePtr := gobber.Get("name")
-name := *(*string)(namePtr)
+name := *(*string)(namePtr) //"new"
+```
+
+## How it works
+
+```text
+(address of the object) + (offset of the field in struct) == (address of the field)
+
+//Get
+*(*Type)(address of the field)
+
+//Set
+*(*Type)(address of the field) = *(*Type)(address of the new value)
 ```
 
 ## Benchmark

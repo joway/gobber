@@ -11,6 +11,7 @@ type testStruct struct {
 	string   string
 	int      int
 	pointer  *testStruct
+	iface    interface{}
 	function func() int
 }
 
@@ -28,6 +29,8 @@ func initField(obj *testStruct, fieldName string, fieldValue interface{}) {
 		obj.int = fieldValue.(int)
 	case "pointer":
 		obj.pointer = fieldValue.(*testStruct)
+	case "iface":
+		obj.iface = fieldValue.(interface{})
 	case "function":
 		obj.function = fieldValue.(func() int)
 	}
@@ -42,6 +45,8 @@ func equalField(t *testing.T, obj *testStruct, fieldName string, gotPtr unsafe.P
 		exceptPtr = unsafe.Pointer(&obj.int)
 	case "pointer":
 		exceptPtr = unsafe.Pointer(&obj.pointer)
+	case "iface":
+		exceptPtr = unsafe.Pointer(&obj.iface)
 	case "function":
 		exceptPtr = unsafe.Pointer(&obj.function)
 	}
@@ -53,6 +58,7 @@ func TestGobber(t *testing.T) {
 		{"string", "old", "new"},
 		{"int", 1, -1},
 		{"pointer", &testStruct{int: 1}, &testStruct{int: -1}},
+		{"iface", (interface{})(&testStruct{int: 1}), (interface{})(&testStruct{int: -1})},
 		{"function", func() int { return 1 }, func() int { return -1 }},
 	}
 

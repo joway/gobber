@@ -17,7 +17,7 @@ target := &Car{name: "old"}
 ok := gobber.Set(target, "name", "new")
 
 //get private field
-namePtr := gobber.Get("name")
+namePtr := gobber.Get(target, "name")
 name := *(*string)(namePtr) //"new"
 ```
 

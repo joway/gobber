@@ -9,9 +9,10 @@ type Car struct {
     name string
 }
 
-//set private field
+//init
 gobber := gobber.New(Car{}) //Car{} just for gobber to setup struct metadata
 
+//set private field
 target := &Car{name: "old"}
 ok := gobber.Set(target, "name", "new")
 
